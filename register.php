@@ -10,8 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $password = $_POST["password"] ?? "";
     $name = trim($_POST["name"] ?? "");
+    $app = $_POST["app"] ?? ""; // Nueva variable para la aplicación
 
-    if (!$email || !$password || !$name) {
+    // Validar que todos los campos, incluyendo 'app', tengan valor
+    if (!$email || !$password || !$name || !$app) {
         $msg = "Todos los campos son obligatorios";
     } else {
 
@@ -27,16 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
+            // Se agrega la columna 'app' a la consulta INSERT
             $stmt = $db->prepare(
-                "INSERT INTO users (email, password, name) VALUES (?, ?, ?)"
+                "INSERT INTO users (email, password, name, app) VALUES (?, ?, ?, ?)"
             );
-            $stmt->bind_param("sss", $email, $hash, $name);
+            $stmt->bind_param("ssss", $email, $hash, $name, $app);
             $stmt->execute();
 
-            // OPCIONAL: mensaje para login
             $_SESSION['success'] = "Usuario creado correctamente, inicia sesión";
 
-            // REDIRECCIÓN
             header("Location: login_notifications.php");
             exit;
         }
@@ -66,10 +67,11 @@ body{
     width:320px;
     box-shadow:0 0 10px rgba(0,0,0,.15);
 }
-input,button{
+input, button, select{ /* Se agrega select al estilo */
     width:100%;
     padding:10px;
     margin-top:10px;
+    box-sizing: border-box;
 }
 button{
     background:#00696B;
@@ -81,6 +83,12 @@ button{
     margin-top:10px;
     text-align:center;
     color:red;
+}
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
 }
 </style>
 </head>
@@ -94,6 +102,14 @@ button{
         <input type="text" name="name" placeholder="Nombre" required>
         <input type="email" name="email" placeholder="Correo" required>
         <input type="password" name="password" placeholder="Contraseña" required>
+        
+        <label for="app">Vincular a aplicación:</label>
+        <select name="app" id="app" required>
+            <option value="" disabled selected>Selecciona una app</option>
+            <option value="rpsp">Reavivados por su Palabra (RPSP)</option>
+            <option value="radio">Esperanza México Radio</option>
+        </select>
+
         <button type="submit">Crear</button>
     </form>
 
