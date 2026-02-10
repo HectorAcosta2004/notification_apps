@@ -10,9 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $password = $_POST["password"] ?? "";
     $name = trim($_POST["name"] ?? "");
-    $app = $_POST["app"] ?? ""; // Nueva variable para la aplicación
+    $app = $_POST["app"] ?? ""; 
 
-    // Validar que todos los campos, incluyendo 'app', tengan valor
+    
     if (!$email || !$password || !$name || !$app) {
         $msg = "Todos los campos son obligatorios";
     } else {
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            // Se agrega la columna 'app' a la consulta INSERT
+      
             $stmt = $db->prepare(
                 "INSERT INTO users (email, password, name, app) VALUES (?, ?, ?, ?)"
             );
@@ -67,7 +67,7 @@ body{
     width:320px;
     box-shadow:0 0 10px rgba(0,0,0,.15);
 }
-input, button, select{ /* Se agrega select al estilo */
+input, button, select{
     width:100%;
     padding:10px;
     margin-top:10px;
