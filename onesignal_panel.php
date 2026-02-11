@@ -72,11 +72,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
     $configs = [
         'app1' => [
             'app_id' => '85a1d19b-6490-4c8a-9a7e-b051c0d4de49',
-            'api_key' => 'os_v2_app_qwq5dg3esbgivgt6wbi4bvg6jgftn2hgkfmu62n7sm46r5zkxcg7p2nmjw32znkbid3q3a534l5bmnf77igov3g6wni7glmv2o44bsa'
+            'api_key' => 'os_v2_app_qwq5dg3esbgivgt6wbi4bvg6jgus5ixyeueelmnrt7h2mp6nf5tsfte2apuoliuq2i3nmyqfkqt5sucnj6feqdasan7lwxmi3omgiuq'
         ],
         'app2' => [
             'app_id' => '58318179-63da-4dc6-8ab9-cf054484b51c',
-            'api_key' => 'os_v2_app_layyc6ld3jg4ncvzz4cujbfvdr6fnfkxohxenemrn7oejy2njzr6nwtcq3flz2qgnvr7ipvorave2pup4ttfbwisg6e5y2oy46te7uq'
+            'api_key' => 'os_v2_app_layyc6ld3jg4ncvzz4cujbfvdrbg56fzotcevdevqv4fw5cvj7kzhi5hmsq5llumnrv6n4hwwckaudxnq7fypyw2zrvxphfpkkgksqi'
         ]
     ];
 
@@ -125,7 +125,9 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
             ],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($data)
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_SSL_VERIFYPEER => false,
+CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $response = curl_exec($ch);
@@ -133,7 +135,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
         $curl_error = curl_error($ch);
         curl_close($ch);
 
-        if ($response===false || $http_code!==200) {
+        if ($response===false || ($http_code !== 200 && $http_code !== 201)) {
             echo json_encode(['error'=>true,'message'=>'Error al enviar notificación','curl_error'=>$curl_error,'http_code'=>$http_code]);
             exit;
         }

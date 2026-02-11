@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Login RPSP</title>
+<title>Login </title>
 
 <style>
 body {
