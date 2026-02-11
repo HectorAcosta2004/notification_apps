@@ -72,11 +72,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
     $configs = [
         'app1' => [
             'app_id' => '85a1d19b-6490-4c8a-9a7e-b051c0d4de49',
-            'api_key' => 'os_v2_app_qwq5dg3esbgivgt6wbi4bvg6jgus5ixyeueelmnrt7h2mp6nf5tsfte2apuoliuq2i3nmyqfkqt5sucnj6feqdasan7lwxmi3omgiuq'
+            'api_key' => 'os_v2_app_qwq5dg3esbgivgt6wbi4bvg6jgovsv2fgqsed4fyoab5em5abvoeswwwfuofyyngsmtl6ubeswdc4dnqbj7qx2f2tvdllz7h5znbmpi'
         ],
         'app2' => [
             'app_id' => '58318179-63da-4dc6-8ab9-cf054484b51c',
-            'api_key' => 'os_v2_app_layyc6ld3jg4ncvzz4cujbfvdrbg56fzotcevdevqv4fw5cvj7kzhi5hmsq5llumnrv6n4hwwckaudxnq7fypyw2zrvxphfpkkgksqi'
+            'api_key' => 'os_v2_app_layyc6ld3jg4ncvzz4cujbfvdsmnvof3ko3ud2nt7q6z3z3vilhtpsrszhl5hksydhj6bgzudya2ifs3hgbwtsagdvonanjuaehotla'
         ]
     ];
 
@@ -127,7 +127,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_SSL_VERIFYPEER => false,
-CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYHOST => false,
         ]);
 
         $response = curl_exec($ch);
