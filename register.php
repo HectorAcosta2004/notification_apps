@@ -102,7 +102,6 @@ label {
         <input type="text" name="name" placeholder="Nombre" required>
         <input type="email" name="email" placeholder="Correo" required>
         <input type="password" name="password" placeholder="Contraseña" required>
-        
         <label for="app">Vincular a aplicación:</label>
         <select name="app" id="app" required>
             <option value="" disabled selected>Selecciona una app</option>
