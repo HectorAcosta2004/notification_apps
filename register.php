@@ -289,6 +289,17 @@ input[type="checkbox"] {
     </label>
 
 </div>
+    <label>Roles de usuarios:</label>
+    <div class="select-wrapper">
+        <select name="roles" required>
+            <option value="">Seleccionar Rol de usuario</option>
+            <option value="administrator">Administrador</option>
+            <option value="editor">Editor</option>
+            <option value="author">Autor</option>
+            <option value="contributor">Colaborador</option>
+             <option value="subscriber">Suscriptor</option>
+        </select>
+    </div>
 
     <label>Institución:</label>
 
