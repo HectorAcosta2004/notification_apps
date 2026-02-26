@@ -38,11 +38,11 @@ $apps_usuario = array_map('trim', explode(",", $_SESSION['app']));
 $configs = [
     'app1' => [
         'app_id' => '85a1d19b-6490-4c8a-9a7e-b051c0d4de49',
-        'api_key' => 'TU_API_KEY_1'
+        'api_key' => 'os_v2_app_qwq5dg3esbgivgt6wbi4bvg6jfx2nkn6oxauv5mfx3rj36q47mzrqwmvqs7kfs4xckj3ckoat7n54bmenvzlgzkt633yibljaxywvbq'
     ],
     'app2' => [
         'app_id' => '58318179-63da-4dc6-8ab9-cf054484b51c',
-        'api_key' => 'TU_API_KEY_2'
+        'api_key' => 'os_v2_app_layyc6ld3jg4ncvzz4cujbfvdrjbrkdherxuuzuo5azv3r43w2qd567pi4zzkrht2wkok2hbfntcdvcnzapkpzurpwafs6vcxwnceai'
     ]
 ];
 
