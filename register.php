@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $app_string = implode(",", $apps);
 
-        $check = $db->prepare("SELECT id FROM users WHERE email = ?");
+        $check = $mysqli->prepare("SELECT id FROM users WHERE email = ?");
         $check->bind_param("s", $email);
         $check->execute();
         $check->store_result();
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $db->prepare(
+            $stmt = $mysqli->prepare(
                 "INSERT INTO users (email, password, name, app, instituciones) 
                  VALUES (?, ?, ?, ?, ?)"
             );
