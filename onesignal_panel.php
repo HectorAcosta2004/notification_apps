@@ -29,7 +29,8 @@ if (isset($_SESSION['ultimo_acceso'])) {
 // Actualiza el tiempo de última actividad
 $_SESSION['ultimo_acceso'] = time();
 
-$user_app = $_SESSION['app'];
+$apps_usuario = explode(",", $_SESSION['app']);
+$user_app = $apps_usuario[0]; 
 
 /* =========================
    CONFIGURACIÓN ONESIGNAL
