@@ -262,9 +262,20 @@ input[type="checkbox"] {
 
 <div class="box">
 
-<form action="logout_2.php" method="POST" style="text-align:right;">
-    <button type="submit" class="logout-btn">Cerrar sesión</button>
-</form>
+<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+
+    <a href="usuarios_admin.php">
+        <button type="button" 
+            style="background:#6c757d; padding:8px 12px; border:none; border-radius:4px; color:white; cursor:pointer;">
+             Volver
+        </button>
+    </a>
+
+    <form action="logout_2.php" method="POST">
+        <button type="submit" class="logout-btn">Cerrar sesión</button>
+    </form>
+
+</div>
 
 <h2>Crear usuario</h2>
 

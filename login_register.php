@@ -105,7 +105,7 @@ async function login() {
         msg.textContent = "Login correcto";
 
         setTimeout(() => {
-            window.location.href = "register.php";
+            window.location.href = "usuarios_admin.php";
         }, 1000);
 
     } catch (e) {
