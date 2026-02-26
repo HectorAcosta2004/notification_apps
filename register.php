@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt = $db->prepare(
-                "INSERT INTO users (email, password, name, app, Instituciones) 
+                "INSERT INTO users (email, password, name, app, instituciones) 
                  VALUES (?, ?, ?, ?, ?)"
             );
 
