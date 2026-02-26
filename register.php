@@ -40,16 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"] ?? "";
     $name = trim($_POST["name"] ?? "");
     $apps = $_POST["apps"] ?? [];
+    $institucion = trim($_POST["Instituciones"] ?? "");
 
-    // Validación general
-    if (!$email || !$password || !$name || empty($apps)) {
+    if (!$email || !$password || !$name || !$institucion || empty($apps)) {
         $msg = "Todos los campos son obligatorios y debes seleccionar al menos una aplicación";
     } else {
 
-        // Convertir array de apps a string
         $app_string = implode(",", $apps);
 
-        // Verificar si el correo ya existe
         $check = $db->prepare("SELECT id FROM users WHERE email = ?");
         $check->bind_param("s", $email);
         $check->execute();
@@ -62,9 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt = $db->prepare(
-                "INSERT INTO users (email, password, name, app) VALUES (?, ?, ?, ?)"
+                "INSERT INTO users (email, password, name, app, Instituciones) 
+                 VALUES (?, ?, ?, ?, ?)"
             );
-            $stmt->bind_param("ssss", $email, $hash, $name, $app_string);
+
+            $stmt->bind_param("sssss", $email, $hash, $name, $app_string, $institucion);
             $stmt->execute();
 
             $_SESSION['success'] = "Usuario creado correctamente";
@@ -80,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
 <meta charset="UTF-8">
 <title>Crear usuario</title>
+
 <style>
 body {
     font-family: Arial;
@@ -90,40 +91,55 @@ body {
     height: 100vh;
     margin: 0;
 }
+
 .box {
     background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    width: 320px;
-    box-shadow: 0 0 10px rgba(0,0,0,.15);
+    padding: 30px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
 }
+
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
 input, button {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
     box-sizing: border-box;
-    border-radius: 4px;
+    border-radius: 6px;
     border: 1px solid #ccc;
 }
+
+input:focus {
+    border-color: #00696B;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,105,107,0.15);
+}
+
 button {
     background: #00696B;
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    transition: 0.3s;
 }
+
 button:hover {
     background: #004d4f;
 }
-.msg {
-    margin-top: 10px;
-    text-align: center;
-    color: red;
-}
+
 label {
     font-size: 14px;
     color: #333;
+    margin-top: 10px;
+    display: block;
 }
+
 .logout-btn { 
     background:#dc3545; 
     width:auto; 
@@ -135,21 +151,107 @@ label {
     border-radius:4px; 
     color:white; 
 }
+
 .logout-btn:hover {
     background:#b02a37;
 }
-.checkbox-group {
-    margin-top: 10px;
-}
+
 .checkbox-group label {
     display: block;
     margin-top: 5px;
 }
+
 input[type="checkbox"] {
     margin-right: 6px;
 }
+
+.select-wrapper {
+    position: relative;
+    margin-top: 5px;
+}
+
+.select-wrapper select {
+    appearance: none;
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.select-wrapper select:focus {
+    border-color: #00696B;
+    box-shadow: 0 0 0 2px rgba(0, 105, 107, 0.2);
+    background-color: #fff;
+    outline: none;
+}
+
+.select-wrapper::after {
+    content: "▼";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #00696B;
+    pointer-events: none;
+}
+
+.msg {
+    margin-top: 10px;
+    text-align: center;
+    color: red;
+}
+.checkbox-group {
+    margin-top: 8px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+}
+
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #00696B;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-item input[type="checkbox"]:hover {
+    background-color: rgba(0,105,107,0.1);
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background-color: #00696B;
+    border-color: #00696B;
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -55%);
+}
 </style>
 </head>
+
 <body>
 
 <div class="box">
@@ -168,16 +270,30 @@ input[type="checkbox"] {
     
     <label>Vincular a aplicación:</label>
 
-    <div class="checkbox-group">
-        <label>
-            <input type="checkbox" name="apps[]" value="rpsp">
-            Reavivados por su Palabra (RPSP)
-        </label>
+<div class="checkbox-group">
 
-        <label>
-            <input type="checkbox" name="apps[]" value="radio">
-            Esperanza México Radio
-        </label>
+    <label class="checkbox-item">
+        <input type="checkbox" name="apps[]" value="rpsp">
+        Reavivados por su Palabra (RPSP)
+    </label>
+
+    <label class="checkbox-item">
+        <input type="checkbox" name="apps[]" value="radio">
+        Esperanza México Radio
+    </label>
+
+</div>
+
+    <label>Institución:</label>
+
+    <div class="select-wrapper">
+        <select name="Instituciones" required>
+            <option value="">Seleccionar institución</option>
+            <option value="Unión Mexicana del Norte">Unión Mexicana del Norte</option>
+            <option value="Unión Mexicana Central">Unión Mexicana Central</option>
+            <option value="Unión Mexicana Interoceánica">Unión Mexicana Interoceánica</option>
+            <option value="Unión Mexicana del Sureste">Unión Mexicana del Sureste</option>
+        </select>
     </div>
 
     <button type="submit">Crear</button>
@@ -189,8 +305,6 @@ input[type="checkbox"] {
 <?php endif; ?>
 
 </div>
-
-</body>
 
 <script>
 let tiempoLimite = 180000; 
@@ -210,4 +324,5 @@ document.onclick = reiniciar;
 document.onscroll = reiniciar;
 </script>
 
+</body>
 </html>
