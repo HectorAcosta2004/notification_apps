@@ -6,10 +6,28 @@ session_start();
 ========================= */
 // Si el usuario no ha iniciado sesión, se le redirige al formulario de acceso
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login_notifications.php");
+    header("Location: login_register.php");
     exit;
 }
+/* =========================
+   CONTROL DE INACTIVIDAD
+========================= */
 
+$tiempo_limite = 180;
+
+if (isset($_SESSION['ultimo_acceso'])) {
+    $tiempo_transcurrido = time() - $_SESSION['ultimo_acceso'];
+
+    if ($tiempo_transcurrido > $tiempo_limite) {
+        session_unset();
+        session_destroy();
+        header("Location: login_register.php?expirado=1");
+        exit;
+    }
+}
+
+// Actualiza el tiempo de última actividad
+$_SESSION['ultimo_acceso'] = time();
 /* =========================
    CONFIGURACIÓN DE BASE DE DATOS
 ========================= */
@@ -152,4 +170,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 </body>
+<script>
+let tiempoLimite = 180000; 
+let temporizador;
+
+function reiniciar() {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(() => {
+        window.location.href = "logout_2.php";
+    }, tiempoLimite);
+}
+
+window.onload = reiniciar;
+document.onmousemove = reiniciar;
+document.onkeypress = reiniciar;
+document.onclick = reiniciar;
+document.onscroll = reiniciar;
+</script>
 </html>

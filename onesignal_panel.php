@@ -9,6 +9,25 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['app'])) {
     header("Location: login_notifications.php");
     exit;
 }
+/* =========================
+   CONTROL DE INACTIVIDAD
+========================= */
+
+$tiempo_limite = 180;
+
+if (isset($_SESSION['ultimo_acceso'])) {
+    $tiempo_transcurrido = time() - $_SESSION['ultimo_acceso'];
+
+    if ($tiempo_transcurrido > $tiempo_limite) {
+        session_unset();
+        session_destroy();
+        header("Location: login_notifications.php?expirado=1");
+        exit;
+    }
+}
+
+// Actualiza el tiempo de última actividad
+$_SESSION['ultimo_acceso'] = time();
 
 $user_app = $_SESSION['app'];
 
@@ -166,7 +185,21 @@ document.getElementById("formNoti").addEventListener("submit", function(e) {
         document.getElementById("mensajeError").innerText = "❌ Error de conexión";
         document.getElementById("mensajeError").style.display = "block";
     });
-});
+});let tiempoLimite = 180000; 
+let temporizador;
+
+function reiniciar() {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(() => {
+        window.location.href = "logout.php";
+    }, tiempoLimite);
+}
+
+window.onload = reiniciar;
+document.onmousemove = reiniciar;
+document.onkeypress = reiniciar;
+document.onclick = reiniciar;
+document.onscroll = reiniciar;
 </script>
 </body>
 </html>
