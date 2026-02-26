@@ -8,6 +8,13 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login_register.php");
     exit;
 }
+/* =========================
+   VALIDACIÓN DE ROL
+========================= */
+if (!isset($_SESSION['roles']) || $_SESSION['roles'] !== 'administrator') {
+    header("Location: login_register.php?acceso_denegado=1");
+    exit;
+}
 
 /* =========================
    CONTROL DE INACTIVIDAD
@@ -30,8 +37,7 @@ $_SESSION['ultimo_acceso'] = time();
 /* =========================
    BASE DE DATOS
 ========================= */
-$db = new mysqli("localhost", "root", "", "Reavivados");
-
+require_once 'db.php';
 $msg = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

@@ -2,10 +2,7 @@
 session_start();
 
 // Configuración de base de datos
-$db_host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$db_name = "Reavivados";
+require_once 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Content-Type: application/json; charset=UTF-8");
@@ -18,14 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    $mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     if ($mysqli->connect_error) {
         echo json_encode(["status" => "error", "message" => "Error de conexión"]);
         exit;
     }
 
-    $stmt = $mysqli->prepare("SELECT id, name, password, app FROM users WHERE email=? LIMIT 1");
-    $stmt->bind_param("s", $data["email"]);
+    $stmt = $mysqli->prepare("SELECT id, name, password, app, roles FROM users WHERE email=? LIMIT 1");    $stmt->bind_param("s", $data["email"]);
     $stmt->execute();
     $res = $stmt->get_result();
 
@@ -35,18 +31,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $user = $res->fetch_assoc();
-    if (!password_verify($data["password"], $user["password"])) {
-        echo json_encode(["status" => "error", "message" => "Contraseña incorrecta"]);
-        exit;
-    }
+
+if (!password_verify($data["password"], $user["password"])) {
+    echo json_encode(["status" => "error", "message" => "Contraseña incorrecta"]);
+    exit;
+}
+
+if ($user["roles"] !== "administrator") {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Tipo de usuario no autorizado"
+    ]);
+    exit;
+}
 
     // Guardamos la sesión
     $_SESSION["user_id"] = $user["id"];
     $_SESSION["app"] = $user["app"];
+    $_SESSION["roles"] = $user["roles"];
 
     echo json_encode([
         "status" => "ok",
-        "user" => ["id" => $user["id"], "name" => $user["name"]]
+        "user" => ["id" => $user["id"], "name" => $user["name"], "roles" => $user["roles"]]
     ]);
     exit; 
 }
@@ -82,7 +88,7 @@ async function login() {
     msg.textContent = "";
 
     try {
-        const res = await fetch("login_notifications.php", {
+        const res = await fetch("login_register.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })

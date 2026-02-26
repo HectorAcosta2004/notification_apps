@@ -2,10 +2,9 @@
 session_start();
 
 // Configuración de base de datos
-$db_host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$db_name = "Reavivados";
+require_once 'db.php';
+$msg = "";
+
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Content-Type: application/json; charset=UTF-8");
@@ -18,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    $mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     if ($mysqli->connect_error) {
         echo json_encode(["status" => "error", "message" => "Error de conexión"]);
         exit;
