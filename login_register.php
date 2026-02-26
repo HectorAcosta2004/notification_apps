@@ -99,7 +99,7 @@ async function login() {
         msg.textContent = "Login correcto";
 
         setTimeout(() => {
-            window.location.href = "onesignal_panel.php";
+            window.location.href = "register.php";
         }, 1000);
 
     } catch (e) {
