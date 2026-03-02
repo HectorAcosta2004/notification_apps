@@ -55,7 +55,7 @@ switch($role) {
 /* =========================
    CONTROL DE INACTIVIDAD
 ========================= */
-$tiempo_limite = 1800; // 30 min
+$tiempo_limite = 180;
 if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > $tiempo_limite)) {
     session_unset();
     session_destroy();

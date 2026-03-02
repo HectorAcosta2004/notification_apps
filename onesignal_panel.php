@@ -255,7 +255,7 @@ document.getElementById("formNoti").addEventListener("submit", function(e) {
 });
 
 // Control de inactividad
-let tiempoLimite = 18000;
+let tiempoLimite = 180000;
 let temporizador;
 function reiniciar(){ clearTimeout(temporizador); temporizador=setTimeout(()=>{ window.location.href="logout.php"; }, tiempoLimite);}
 window.onload = reiniciar;
