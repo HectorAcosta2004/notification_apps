@@ -50,7 +50,7 @@ switch($role) {
 /* =========================
    CONTROL DE INACTIVIDAD
 ========================= */
-$tiempo_limite = 1800; // 30 min
+$tiempo_limite = 180; 
 if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > $tiempo_limite)) {
     session_destroy();
     header("Location: login_notifications.php?expirado=1");
