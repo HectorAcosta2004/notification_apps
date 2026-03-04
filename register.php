@@ -187,11 +187,11 @@ label { font-size:14px; color:#333; margin-top:10px; display:block;}
     <label>Vincular a aplicación:</label>
     <div class="checkbox-group">
         <label class="checkbox-item">
-            <input type="checkbox" name="apps[]" value="rpsp">
+            <input type="checkbox" name="apps[]" value="1">
             Reavivados por su Palabra (RPSP)
         </label>
         <label class="checkbox-item">
-            <input type="checkbox" name="apps[]" value="radio">
+            <input type="checkbox" name="apps[]" value="2">
             Esperanza México Radio
         </label>
     </div>
