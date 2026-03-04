@@ -59,25 +59,40 @@ if (isset($_GET['delete'])) {
     header("Location: usuarios_admin.php");
     exit;
 }
-
-/* =========================
-   ACTUALIZAR USUARIO
-========================= */
 if (isset($_POST['update'])) {
+
     $id = intval($_POST['id']);
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $roles = $_POST['roles'];
     $institucion_id = intval($_POST['institucion_id']);
     $apps_post = $_POST['apps'] ?? [];
+    $password = trim($_POST['password'] ?? '');
 
-    // Actualizar tabla users
-    $stmt = $mysqli->prepare("UPDATE users SET name=?, email=?, roles=?, institucion_id=? WHERE id=?");
-    $stmt->bind_param("sssii", $name, $email, $roles, $institucion_id, $id);
+    /* =========================
+       ACTUALIZAR USUARIO
+    ========================= */
+
+    if (!empty($password)) {
+        // Si escribió contraseña nueva → actualizar también password
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $mysqli->prepare("UPDATE users SET name=?, email=?, roles=?, institucion_id=?, password=? WHERE id=?");
+        $stmt->bind_param("sssisi", $name, $email, $roles, $institucion_id, $password_hash, $id);
+
+    } else {
+        // Si NO escribió contraseña → no tocar password
+        $stmt = $mysqli->prepare("UPDATE users SET name=?, email=?, roles=?, institucion_id=? WHERE id=?");
+        $stmt->bind_param("sssii", $name, $email, $roles, $institucion_id, $id);
+    }
+
     $stmt->execute();
 
-    // Actualizar tabla user_apps
+    /* =========================
+       ACTUALIZAR APPS
+    ========================= */
     $mysqli->query("DELETE FROM user_apps WHERE user_id=$id");
+
     if (!empty($apps_post)) {
         $stmt_apps = $mysqli->prepare("INSERT INTO user_apps(user_id, app_id) VALUES (?, ?)");
         foreach ($apps_post as $app_id) {
@@ -90,7 +105,6 @@ if (isset($_POST['update'])) {
     header("Location: usuarios_admin.php");
     exit;
 }
-
 /* =========================
    OBTENER USUARIOS
 ========================= */
@@ -150,6 +164,7 @@ input:focus, select:focus { border-color:#00696B; outline:none; box-shadow:0 0 0
     <th>Email</th>
     <th>Rol</th>
     <th>Institución</th>
+    <th>Nueva Contraseña</th>
     <th>Apps</th>
     <th>Acciones</th>
 </tr>
@@ -184,6 +199,9 @@ while($ua = $app_query->fetch_assoc()) $apps_usuario[] = $ua['app_id'];
             <?php endforeach; ?>
         </select>
     </td>
+    <td>
+    <input type="password" name="password" placeholder="Nueva contraseña">
+</td>
     <td>
         <div class="checkbox-group">
             <?php foreach($apps as $app): ?>
