@@ -28,11 +28,12 @@ $menu_vistas = [];
 switch($role) {
     case 'root':
         $menu_vistas = [
-            'Registro' => 'register.php',
-            'Usuarios' => 'usuarios_admin.php',
-            'Reportes' => 'reportes_mensajes.php',
-            'Mensajes' => 'onesignal_panel.php',
-        ];
+   'Registro' => 'register.php',
+    'Usuarios' => 'usuarios_admin.php',
+    'Reportes' => 'reportes_mensajes.php',
+    'Mensajes' => 'onesignal_panel.php',
+    'Correo a Unión' => 'cambio_correo.php', 
+];
         break;
     case 'administrator':
         $menu_vistas = [
@@ -45,6 +46,7 @@ switch($role) {
             'Mensajes' => 'onesignal_panel.php',
         ];
         break;
+
 }
 
 /* =========================
