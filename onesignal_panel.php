@@ -60,16 +60,16 @@ switch($role) {
 /* =========================
    CONTROL DE INACTIVIDAD
 ========================= */
-$tiempo_limite = 180;
+$tiempo_maximo = 180;
 
-if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > $tiempo_limite)) {
-    session_destroy();
-    header("Location: login_notifications.php?expirado=1");
-    exit;
+if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > $tiempo_maximo)) {
+   session_unset();
+   session_destroy();
+   header("Location: login_notifications.php?expirado=1");
+   exit;
 }
 
 $_SESSION['ultimo_acceso'] = time();
-
 /* =========================
    OBTENER APPS DEL USUARIO
 ========================= */
