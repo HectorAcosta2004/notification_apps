@@ -162,7 +162,7 @@ if (!$result) {
             width: 100%;
             border-collapse: collapse;
         }
-
+ 
         th {
             background: #00696B;
             color: white;
